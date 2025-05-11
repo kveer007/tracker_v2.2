@@ -77,18 +77,21 @@
   display: flex;
   padding: 0;
   width: 100%;
+  flex-wrap: nowrap; /* Prevent wrapping */
 }
 
 /* Date navigation container with overflow masking */
 .date-navigation {
   display: flex;
-  align-items: center; /* This centers items vertically */
-  justify-content: flex-start; /* Align buttons to the left */
-  padding: 0 16px;
+  align-items: center; 
+  justify-content: flex-start; 
+  padding: 0;
   width: 35%; /* Same as habit-name-section */
-  position: relative; /* For positioning the mask */
-  overflow: hidden; /* Hide overflowing content */
-  height: 65px; /* Fixed height to help with alignment */
+  position: relative;
+  overflow: visible; /* Changed from hidden to allow buttons to be visible */
+  height: 65px;
+  /* Add z-index to ensure buttons appear above other elements */
+  z-index: 10;
 }
 
 /* Date nav buttons basic styling */
@@ -107,6 +110,9 @@
   font-size: 12px;
   flex-shrink: 0;
   transition: transform 0.3s ease, opacity 0.3s ease, visibility 0.3s ease;
+  position: relative; /* Changed from absolute */
+  margin: 0 4px;
+  z-index: 10;
 }
 
 .date-nav-button:hover {
@@ -115,10 +121,10 @@
 
 /* Back button always visible */
 .date-nav-back {
-  position: absolute;
-  left: 16px;
-  top: 50%; /* Position at 50% from the top */
-  transform: translateY(-50%); /* Offset by half the height to center */
+  position: relative;
+  left: auto;
+  top: auto;
+  transform: none;
   z-index: 3; /* Ensure it's always on top */
 }
 
@@ -128,37 +134,39 @@
   min-width: 60px;
   padding: 0 8px;
   border-radius: 14px;
-  position: absolute;
-  left: 56px; /* Position after back button with some space */
-  top: 50%; /* Position at 50% from the top */
-  transform: translateY(-50%) translateX(-20px); /* Center vertically and initially pushed left */
-  opacity: 0;
+  position: relative;
+  left: auto;
+  top: auto;
+  transform: none;
+  opacity: 0; /* Initially hidden */
   z-index: 2;
   pointer-events: none; /* Prevent interaction when hidden */
+  transition: opacity 0.3s ease, transform 0.3s ease;
 }
 
 /* Forward button styling */
 .date-nav-forward {
-  position: absolute;
-  left: 124px; /* Position after Today button with some space */
-  top: 50%; /* Position at 50% from the top */
-  transform: translateY(-50%) translateX(-20px); /* Center vertically and initially pushed left */
-  opacity: 0;
+  position: relative;
+  left: auto;
+  top: auto;
+  transform: none;
+  opacity: 0; /* Initially hidden */
   z-index: 1;
   pointer-events: none; /* Prevent interaction when hidden */
-  visibility: hidden; /* Ensure it takes no space */
+  visibility: hidden; /* Initially hidden */
+  transition: opacity 0.3s ease, visibility 0.3s ease, transform 0.3s ease;
 }
 
 /* Active state for navigation buttons - slide in */
 .show-navigation .today-button {
   opacity: 1;
-  transform: translateY(-50%) translateX(0); /* Keep vertical center while sliding in */
+  transform: none;
   pointer-events: all; /* Re-enable interaction */
 }
 
 .show-navigation .date-nav-forward:not(.disabled) {
   opacity: 1;
-  transform: translateY(-50%) translateX(0); /* Keep vertical center while sliding in */
+  transform: none;
   pointer-events: all; /* Re-enable interaction */
   visibility: visible; /* Make it visible */
 }
@@ -882,7 +890,27 @@
   }
   
   .date-navigation {
+    padding: 0 4px;
     width: 40%; /* Match habit-name-section width */
+    justify-content: flex-start;
+  }
+  
+  .date-nav-button {
+    width: 28px;
+    height: 28px;
+    min-width: 28px;
+    margin: 0 2px;
+  }
+  
+  .today-button {
+    min-width: 50px;
+    padding: 0 4px;
+    font-size: 11px;
+    opacity: 0; /* Maintain hidden state */
+  }
+  
+  .show-navigation .today-button {
+    opacity: 1; /* Show when navigation active */
   }
   
   .habit-day svg {
@@ -914,16 +942,23 @@
   
   .date-navigation {
     width: 45%; /* Match habit-name-section width */
-    padding: 0 5px;
+    padding: 0 2px;
   }
   
   .date-nav-button {
     min-width: 24px;
     width: 24px;
     height: 24px;
+    margin: 0 1px;
   }
   
   .today-button {
-    min-width: 50px;
+    min-width: 40px;
+    font-size: 10px;
+    opacity: 0; /* Maintain hidden state */
+  }
+  
+  .show-navigation .today-button {
+    opacity: 1; /* Show when navigation active */
   }
 }
